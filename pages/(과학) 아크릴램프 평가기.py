@@ -27,7 +27,7 @@ def try_generate_content(api_key, image):
     model = genai.GenerativeModel('gemini-pro-vision')
     try:
         # 콘텐츠 생성 시도
-        response = model.generate_content(["이 사진은 화석표본입니다. 화석의 이름을 말해주고, 현재 존재한 동물중 유사한 생김새를 가진 동물을 말해주세요. 해당 생물이 살았던던 환경도 묘사해주세요.", image])
+        response = model.generate_content(["이 사진은 6학년 학생이 아크릴과 조명으로 만든 무드등입니다. 아크릴에 있는 그림을 긍정적으로 평가해주고, 아크릴 무드등의 전기회로 원리를 설명해주세요.", image])
         response.resolve()
         return response
     except Exception as e:
@@ -36,7 +36,7 @@ def try_generate_content(api_key, image):
         return None
 
 # 핸드폰 사진 업로드 기능 추가
-uploaded_file = st.file_uploader("핸드폰으로 화석표본을 가로로 찍어주세요.")
+uploaded_file = st.file_uploader("핸드폰으로 학생이 그린 작품을 가로로 찍어주세요.")
 
 # 이미지가 업로드되었는지 확인git init
 
