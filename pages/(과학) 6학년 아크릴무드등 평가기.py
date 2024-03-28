@@ -18,8 +18,8 @@ with open(secrets_path, "r") as f:
     secrets = toml.load(f)
 
 # secrets.toml 파일에서 API 키 값 가져오기
-gemini_api_key1 = secrets.get("gemini_api_key1")
-gemini_api_key2 = secrets.get("gemini_api_key2")
+gemini_api_key7 = secrets.get("gemini_api_key7")
+gemini_api_key8 = secrets.get("gemini_api_key8")
 
 def try_generate_content(api_key, image):
     # API 키를 설정
@@ -48,12 +48,12 @@ if uploaded_file is not None:
     img = Image.open(io.BytesIO(img_bytes))
 
     # 첫 번째 API 키로 시도
-    response = try_generate_content(gemini_api_key1, img)
+    response = try_generate_content(gemini_api_key7, img)
     
     # 첫 번째 API 키 실패 시, 두 번째 API 키로 재시도
-    if response is None and gemini_api_key2 is not None:
+    if response is None and gemini_api_key8 is not None:
         print("첫 번째 API 호출에 실패하여 두 번째 API 키로 재시도합니다.")
-        response = try_generate_content(gemini_api_key2, img)
+        response = try_generate_content(gemini_api_key8, img)
     
     # 결과가 성공적으로 반환되었는지 확인
     if response is not None:
