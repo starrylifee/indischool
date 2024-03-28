@@ -27,7 +27,7 @@ def try_generate_content(api_key, image):
     model = genai.GenerativeModel('gemini-pro-vision')
     try:
         # 콘텐츠 생성 시도
-        response = model.generate_content(["이 사진은 6학년 학생이 아크릴과 조명으로 만든 무드등입니다. 아크릴에 있는 그림을 긍정적으로 평가해주고, 아크릴 무드등의 전기회로 원리를 설명해주세요.", image])
+        response = model.generate_content(["이 사진은 6학년 학생이 아크릴과 조명으로 만든 무드등입니다. 학생이 그린 그림을 설명한 뒤 긍정적으로 평가해주고, AAA규격의 건전지2개로 불빛이 나오는 이 아크릴 무드등의 전기회로 원리를 설명해주세요.", image])
         response.resolve()
         return response
     except Exception as e:
