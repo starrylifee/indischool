@@ -5,6 +5,7 @@ import streamlit as st
 import toml
 from PIL import Image
 import io
+import base64
 
 def to_markdown(text):
     text = text.replace('•', '*')
@@ -35,10 +36,23 @@ def try_generate_content(api_key, image):
         print(f"API 호출 실패: {e}")
         return None
 
-# 핸드폰 사진 업로드 기능 추가
-uploaded_file = st.file_uploader("핸드폰으로 학생이 그린 작품을 가로로 찍어주세요.")
+# 이미지를 다운로드 가능한 바이트 스트림으로 변환하는 함수
+def get_image_download_link(img):
+    buffered = io.BytesIO()
+    img.save(buffered, format="JPEG")
+    img_str = base64.b64encode(buffered.getvalue()).decode()
+    href = f'<a href="data:image/jpeg;base64,{img_str}" download="generated_image.jpg">이미지 다운로드</a>'
+    return href
 
-# 이미지가 업로드되었는지 확인git init
+# 생성된 텍스트를 다운로드 가능한 링크로 변환하는 함수
+def get_text_download_link(text):
+    text_bytes = text.encode()
+    text_str = base64.b64encode(text_bytes).decode()
+    href = f'<a href="data:text/plain;base64,{text_str}" download="generated_text.txt">텍스트 다운로드</a>'
+    return href
+
+# 핸드폰 사진 업로드 기능 추가
+uploaded_file = st.file_uploader("핸드폰으로 학생이 그린 작품을 찍어주세요.")
 
 if uploaded_file is not None:
     # 이미지 바이트 문자열로 변환
@@ -60,6 +74,12 @@ if uploaded_file is not None:
         # 결과 표시
         st.image(img)  # 업로드된 사진 출력
         st.markdown(response.text)
+        
+        # 이미지와 텍스트 다운로드 링크 생성 및 표시
+        img_download_link = get_image_download_link(img)
+        st.markdown(img_download_link, unsafe_allow_html=True)
+        text_download_link = get_text_download_link(response.text)
+        st.markdown(text_download_link, unsafe_allow_html=True)
     else:
         st.markdown("API 호출에 실패했습니다. 나중에 다시 시도해주세요.")
 else:
