@@ -46,7 +46,7 @@ def try_generate_content(api_key, uploaded_file):
         return f"API 호출 실패: {e}"
 
 # 스트림릿 UI 설정
-st.title("아크릴 무드등 평가기")
+st.title("아크릴 무드등 활동")
 
 uploaded_file = st.file_uploader("이미지 업로드", type=["jpg", "jpeg", "png"])
 
