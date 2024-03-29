@@ -57,25 +57,22 @@ if uploaded_file is not None:
     
     # 결과가 성공적으로 반환되었는지 확인
     if response is not None:
-        # response 객체의 속성과 내용 디버깅
-        st.write("Response 객체 디버깅:")
-        try:
-            # 예를 들어, response 객체의 주요 속성들을 출력
-            # 실제 사용 가능한 속성으로 대체 필요
-            st.write("Response 객체 타입:", type(response))
-            # 여기에 response 객체가 제공하는 다른 속성이나 메서드를 사용하여 정보 출력
+        # response 객체에서 candidates 리스트 확인
+        if hasattr(response, 'candidates') and response.candidates:
+            # candidates 리스트의 첫 번째 요소의 safety_ratings 확인
+            st.write("Candidates Safety Ratings:", response.candidates[0].safety_ratings)
             
-            # response에서 텍스트 내용을 가져오는 방법
-            if hasattr(response, 'text'):  # response 객체에 text 속성이 있는지 확인
-                generated_text = response.text
+            # candidates 리스트의 첫 번째 요소의 text 확인 (가능할 경우)
+            if hasattr(response.candidates[0], 'parts') and response.candidates[0].parts:
+                generated_text = response.candidates[0].parts[0].text
                 st.write("Generated Text:", generated_text)
             else:
-                st.error("response 객체에 'text' 속성이 없습니다.")
-        except Exception as e:
-            # 오류 발생 시 오류 메시지 출력
-            st.error(f"디버깅 중 오류 발생: {e}")
+                st.write("No parts available in the first candidate.")
+        else:
+            st.write("No candidates available or blocked due to safety ratings.")
     else:
         st.markdown("API 호출에 실패했습니다. 나중에 다시 시도해주세요.")
+
 
 else:
     st.markdown("핸드폰 사진을 업로드하세요.")
