@@ -52,7 +52,7 @@ def get_text_download_link(text):
     return href
 
 # 핸드폰 사진 업로드 기능 추가
-uploaded_file = st.file_uploader("핸드폰으로 학생이 그린 작품을 가로로 찍어주세요.")
+uploaded_file = st.file_uploader("핸드폰으로 학생이 그린 작품을 찍어주세요.")
 
 if uploaded_file is not None:
     # 이미지 바이트 문자열로 변환
