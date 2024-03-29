@@ -5,13 +5,13 @@ import streamlit as st
 import toml
 from PIL import Image
 import io
-import base64
 
+# to_markdown 함수 정의
 def to_markdown(text):
     text = text.replace('•', '*')
     return textwrap.indent(text, '> ', predicate=lambda _: True)
 
-# secrets.toml 파일 경로
+# secrets.toml 파일 경로 설정
 secrets_path = pathlib.Path(__file__).parent.parent / ".streamlit/secrets.toml"
 
 # secrets.toml 파일 읽기
@@ -22,6 +22,7 @@ with open(secrets_path, "r") as f:
 gemini_api_key7 = secrets.get("gemini_api_key7")
 gemini_api_key8 = secrets.get("gemini_api_key8")
 
+# 콘텐츠 생성 시도 함수 정의
 def try_generate_content(api_key, image):
     # API 키를 설정
     genai.configure(api_key=api_key)
@@ -37,7 +38,7 @@ def try_generate_content(api_key, image):
         return None
 
 # 핸드폰 사진 업로드 기능 추가
-uploaded_file = st.file_uploader("핸드폰으로 학생이 그린 작품을 찍어주세요.")
+uploaded_file = st.file_uploader("핸드폰으로 학생이 그린 작품을 가로로 찍어주세요.")
 
 if uploaded_file is not None:
     # 이미지 바이트 문자열로 변환
@@ -56,18 +57,19 @@ if uploaded_file is not None:
     
     # 결과가 성공적으로 반환되었는지 확인
     if response is not None:
-        # 결과 표시
-        st.image(img)  # 업로드된 사진 출력
+        # 업로드된 사진 출력
+        st.image(img)
+        # 생성된 텍스트 출력
         st.markdown(response.text)
 
-        # 이미지 다운로드 버튼 생성
-        img_bytes = io.BytesIO()
-        img.save(img_bytes, format='JPEG')
-        st.download_button(label="이미지 다운로드", data=img_bytes.getvalue(), file_name="generated_image.jpg", mime="image/jpeg")
-        
-        # 텍스트 다운로드 버튼 생성
-        st.download_button(label="텍스트 다운로드", data=response.text.encode('utf-8'), file_name="generated_text.txt", mime="text/plain")
-        
+        # 생성된 텍스트 다운로드 버튼 추가
+        if 'response_text' not in st.session_state or st.session_state['response_text'] != response.text:
+            st.session_state['response_text'] = response.text
+
+        st.download_button(label="텍스트 다운로드",
+                           data=st.session_state['response_text'].encode('utf-8'),
+                           file_name="generated_text.txt",
+                           mime="text/plain")
     else:
         st.markdown("API 호출에 실패했습니다. 나중에 다시 시도해주세요.")
 else:
