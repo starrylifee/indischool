@@ -56,25 +56,22 @@ if uploaded_file is not None:
         response = try_generate_content(gemini_api_key2, img)
     
     # 결과가 성공적으로 반환되었는지 확인
+    # 결과가 성공적으로 반환되었는지 확인
     if response is not None:
-        # 결과 표시
-        # 업로드된 사진 출력
-        st.image(img)
-
-        # 생성된 텍스트 출력
-        st.markdown(response.text)
-
-        # 이미지 다운로드 버튼 추가
-        img_byte_array = io.BytesIO()
-        img.save(img_byte_array, format=img.format)
-        st.download_button(label="이미지 다운로드", data=img_byte_array.getvalue(),
-                           file_name="uploaded_image.png", mime="image/png")
-
-        # 텍스트 다운로드 버튼 추가
-        text_data = response.text.encode('utf-8')
-        st.download_button(label="텍스트 다운로드", data=text_data,
-                           file_name="generated_text.txt", mime="text/plain")
-
+        # response 객체의 속성과 내용 디버깅
+        st.write("Response 객체 디버깅:")
+        try:
+            # response의 주요 속성 출력
+            st.write("Response Status Code:", response.status_code)
+            st.write("Response Headers:", response.headers)
+            st.write("Response JSON:", response.json())
+            
+            # response.text 접근 시도
+            generated_text = response.text
+            st.write("Generated Text:", generated_text)
+        except Exception as e:
+            # 오류 발생 시 오류 메시지 출력
+            st.error(f"오류 발생: {e}")
     else:
         st.markdown("API 호출에 실패했습니다. 나중에 다시 시도해주세요.")
 else:
