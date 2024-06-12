@@ -4,3 +4,5 @@ toml
 Pillow
 openai
 openpyxl
+beautifulsoup4
+requests
