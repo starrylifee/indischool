@@ -19,7 +19,7 @@ def to_markdown(text):
     return textwrap.indent(text, '> ')
 
 # secrets.toml 파일 경로
-secrets_path = pathlib.Path(__file__).parent / "secrets.toml"
+secrets_path = pathlib.Path(__file__).parent.parent / ".streamlit/secrets.toml"
 
 # secrets.toml 파일 읽기
 with open(secrets_path, "r") as f:
