@@ -24,7 +24,7 @@ gemini_api_key2 = secrets.get("gemini_api_key2")
 def try_generate_content(api_key, image):
     # API 키를 설정
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel('gemini-pro-vision')
+    model = genai.GenerativeModel('gemini-1.5-flash')
     try:
         # 콘텐츠 생성 시도
         response = model.generate_content(["이 사진은 화석표본입니다. 화석의 이름을 말해주고, 현재 존재한 동물중 유사한 생김새를 가진 동물을 말해주세요. 해당 생물이 살았던던 환경도 묘사해주세요.", image])

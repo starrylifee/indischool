@@ -26,7 +26,7 @@ gemini_api_key8 = secrets.get("gemini_api_key8")
 # 안전 설정을 포함한 콘텐츠 생성 시도 함수
 def try_generate_content(api_key, uploaded_file):
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel('gemini-pro-vision')
+    model = genai.GenerativeModel('gemini-1.5-flash')
     
     img_bytes = uploaded_file.getvalue()
     image_parts = {

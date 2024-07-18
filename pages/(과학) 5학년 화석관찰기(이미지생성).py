@@ -44,7 +44,7 @@ def try_generate_text_content(api_key, prompt_parts):
     genai.configure(api_key=api_key)
     
     # 설정된 모델 변경
-    model = genai.GenerativeModel(model_name="gemini-1.0-pro",
+    model = genai.GenerativeModel(model_name="gemini-1.5-flash",
                                   generation_config={
                                       "temperature": 0.9,
                                       "top_p": 1,

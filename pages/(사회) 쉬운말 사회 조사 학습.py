@@ -74,7 +74,7 @@ def remove_html_tags(text):
 # OpenAI GPT 호출 함수
 def simplify_text(text):
     prompt = f"다음 글을 초등학생이 이해하기 쉽게 요약해 주세요. 글은 2000자 쯤으로 작성해주세요.:\n\n{text}"
-    model = genai.GenerativeModel(model_name="gemini-1.0-pro",
+    model = genai.GenerativeModel(model_name="gemini-1.5-flash",
                                 generation_config={
                                     "temperature": 0.7,
                                     "top_p": 0.9,

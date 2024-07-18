@@ -24,7 +24,7 @@ gemini_api_key2 = secrets.get("gemini_api_key2")
 def try_generate_content(api_key, image):
     # API 키를 설정
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel('gemini-pro-vision')
+    model = genai.GenerativeModel('gemini-1.5-flash')
     try:
         # 콘텐츠 생성 시도
         response = model.generate_content(["이 사진은 초등학생이 직접 그린 미술 작품입니다. 그림 이름을 추천해주고, 그린 작품을 자세히 설명해주세요. 장점을 여러개 말해주고, 보완할 점 1가지를 학생이 상처받지 않도록 온화한 화법으로 말해주세요.", image])

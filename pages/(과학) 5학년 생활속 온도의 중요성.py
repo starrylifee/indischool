@@ -38,7 +38,7 @@ gemini_api_key6 = secrets.get("gemini_api_key6")
 # 콘텐츠 생성 함수
 def try_generate_content(api_key, prompt_parts):
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel(model_name="gemini-1.0-pro",
+    model = genai.GenerativeModel(model_name="gemini-1.5-flash",
                                   generation_config={
                                       "temperature": 0.9,
                                       "top_p": 1,
