@@ -66,12 +66,13 @@ temperature = None  # 초기 온도 설정
 if weather_input_method == '자동':
     city_name = st.text_input("도시 이름을 입력하세요.")
     if city_name:
-        lat, lon = get_coordinates(city_name)
-        if lat is not None and lon is not None:
-            temperature = get_weather_data(lat, lon)
-            st.write(f"현재 온도(자동): {temperature:.2f}°C")
-        else:
-            st.error("해당 도시의 날씨 정보를 찾을 수 없습니다.")
+        with st.spinner("잠시만 기다리십시오"):
+            lat, lon = get_coordinates(city_name)
+            if lat is not None and lon is not None:
+                temperature = get_weather_data(lat, lon)
+                st.write(f"현재 온도(자동): {temperature:.2f}°C")
+            else:
+                st.error("해당 도시의 날씨 정보를 찾을 수 없습니다.")
 else:
     temperature = st.slider("현재 온도를 입력하세요", min_value=-20, max_value=40, value=20)
     st.write(f"현재 온도(수동): {temperature}°C")
@@ -83,22 +84,29 @@ uploaded_file = st.file_uploader("옷 목록 엑셀 파일을 업로드하세요
 sample_file_url = "https://github.com/starrylifee/indischool/blob/main/data/sample_clothes_100items.xlsx?raw=true"
 st.markdown(f"샘플 파일로 연습해보고, 샘플처럼 자신의 옷을 정리해서 넣어보세요. [샘플 파일 다운로드]({sample_file_url})", unsafe_allow_html=True)
 
+if 'selected_items_descriptions' not in st.session_state:
+    st.session_state.selected_items_descriptions = []
+
 if uploaded_file is not None and temperature is not None:
     df = pd.read_excel(uploaded_file)
     recommended_clothes = recommend_clothes(df, temperature)
     st.write("추천 옷 목록:")
 
-    selected_items_descriptions = []
     for index, row in recommended_clothes.iterrows():
         # 체크박스로 옷 선택
         if st.checkbox(f"{row['Item']} ({row['Color']}, {row['Material']})", key=row['Item']):
-            selected_items_descriptions.append(f"{row['Item']}을 입고 있는")
+            if f"{row['Item']}을 입고 있는" not in st.session_state.selected_items_descriptions:
+                st.session_state.selected_items_descriptions.append(f"{row['Item']}을 입고 있는")
+        else:
+            if f"{row['Item']}을 입고 있는" in st.session_state.selected_items_descriptions:
+                st.session_state.selected_items_descriptions.remove(f"{row['Item']}을 입고 있는")
 
-    # 선택된 모든 옷 항목들을 하나의 프롬프트로 결합
-    if selected_items_descriptions and OPENAI_API_KEY:
-        combined_prompt = ", ".join(selected_items_descriptions[:-1]) + " 및 " + selected_items_descriptions[-1] + " 남자 1명과 여자 1명"
-        
-        if st.button("이미지 생성"):
+# 선택된 모든 옷 항목들을 하나의 프롬프트로 결합
+if st.session_state.selected_items_descriptions and OPENAI_API_KEY:
+    combined_prompt = ", ".join(st.session_state.selected_items_descriptions[:-1]) + " 및 " + st.session_state.selected_items_descriptions[-1] + " 남자 1명과 여자 1명"
+    
+    if st.button("이미지 생성"):
+        with st.spinner("잠시만 기다리십시오"):
             # DALL·E를 사용하여 이미지 생성 요청 (하나의 이미지로 여러 옷 항목 표현)
             image_response = client.images.generate(
                 prompt=combined_prompt,

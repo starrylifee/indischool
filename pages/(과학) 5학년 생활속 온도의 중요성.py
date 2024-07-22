@@ -91,55 +91,56 @@ with col1:  # 왼쪽 컬럼 시작
     word3 = st.selectbox("세 번째 카테고리에서 단어를 선택하세요.", words_database["단어3"], key='word3')
 
     if st.button("단어 생성 및 문장 만들기", key="generate"):
-        prompt = f"주어진 단어 '{word1}', '{word2}', '{word3}'를 이용하여 창의적인 하나의 문장을 만들어주세요."
-        prompt_parts = [prompt]
-        response = try_generate_content(gemini_api_key5, prompt_parts)
-        if response is None and gemini_api_key6 is not None:
-            response = try_generate_content(gemini_api_key6, prompt_parts)
-        if response is not None:
-            st.session_state['response_text'] = response
-        else:
-            st.error("API 호출에 실패했습니다. 나중에 다시 시도해주세요.")
-
+        with st.spinner("잠시만 기다리십시오"):
+            prompt = f"주어진 단어 '{word1}', '{word2}', '{word3}'를 이용하여 창의적인 하나의 문장을 만들어주세요."
+            prompt_parts = [prompt]
+            response = try_generate_content(gemini_api_key5, prompt_parts)
+            if response is None and gemini_api_key6 is not None:
+                response = try_generate_content(gemini_api_key6, prompt_parts)
+            if response is not None:
+                st.session_state['response_text'] = response
+            else:
+                st.error("API 호출에 실패했습니다. 나중에 다시 시도해주세요.")
 
     # 사용자 입력을 받고 세션 상태에 저장
     student_input = st.text_input("온도를 측정하지 않았을 때 생기는 문제는 무엇인가요?", value=st.session_state['student_input'], on_change=save_student_input, key='student_input_text')
 
     if st.button("인공지능의 생각은?", key="ai_thoughts"):
-        prompt = f"{st.session_state['response_text']} 상황에서 온도를 측정하지 않았을 때 생기는 문제를 상상해서 3문장 정도의 짧은 글로 적어주세요."
-        prompt_parts = [prompt]
-        st.session_state['response_text_problem'] = try_generate_content(gemini_api_key5, prompt_parts)
+        with st.spinner("잠시만 기다리십시오"):
+            prompt = f"{st.session_state['response_text']} 상황에서 온도를 측정하지 않았을 때 생기는 문제를 상상해서 3문장 정도의 짧은 글로 적어주세요."
+            prompt_parts = [prompt]
+            st.session_state['response_text_problem'] = try_generate_content(gemini_api_key5, prompt_parts)
 
-        # 첫 번째 시도가 실패했고, 두 번째 API 키가 있을 경우 재시도
-        if st.session_state['response_text_problem'] is None and gemini_api_key6 is not None:
-            st.session_state['response_text_problem'] = try_generate_content(gemini_api_key6, prompt_parts)
-        
-        # 두 번째 시도까지 실패했거나, 첫 번째 시도에서 None을 반환한 경우
-        if st.session_state['response_text_problem'] is None:
-            st.error("API 호출에 실패했습니다. 나중에 다시 시도해주세요.")
-
+            # 첫 번째 시도가 실패했고, 두 번째 API 키가 있을 경우 재시도
+            if st.session_state['response_text_problem'] is None and gemini_api_key6 is not None:
+                st.session_state['response_text_problem'] = try_generate_content(gemini_api_key6, prompt_parts)
+            
+            # 두 번째 시도까지 실패했거나, 첫 번째 시도에서 None을 반환한 경우
+            if st.session_state['response_text_problem'] is None:
+                st.error("API 호출에 실패했습니다. 나중에 다시 시도해주세요.")
 
     # "학생의 생각과 인공지능의 생각을 비교해서 학생을 칭찬해주세요." 버튼을 추가
     if st.button("학생의 생각과 인공지능의 생각 비교 및 칭찬", key="praise"):
-        # 학생의 생각과 인공지능의 생각을 포함하는 새로운 프롬프트 생성
-        if 'student_input' in st.session_state and 'response_text_problem' in st.session_state:
-            comparison_prompt = f"학생의 생각: {st.session_state['student_input']}.\n" \
-                                f"인공지능의 생각: {st.session_state['response_text_problem']}.\n" \
-                                "이 두 생각을 바탕으로 학생을 칭찬하는 문장을 생성해주세요."
-            # 생성형 API를 호출하여 칭찬 문장 생성
-            praise_text = try_generate_content(gemini_api_key5, [comparison_prompt])
-            
-            # API 호출 실패 시, 두 번째 API 키로 재시도
-            if praise_text is None and gemini_api_key6 is not None:
-                praise_text = try_generate_content(gemini_api_key6, [comparison_prompt])
-            
-            # 생성된 칭찬 문장을 세션 상태에 저장 및 출력
-            if praise_text is not None:
-                st.session_state['praise_text'] = praise_text
+        with st.spinner("잠시만 기다리십시오"):
+            # 학생의 생각과 인공지능의 생각을 포함하는 새로운 프롬프트 생성
+            if 'student_input' in st.session_state and 'response_text_problem' in st.session_state:
+                comparison_prompt = f"학생의 생각: {st.session_state['student_input']}.\n" \
+                                    f"인공지능의 생각: {st.session_state['response_text_problem']}.\n" \
+                                    "이 두 생각을 바탕으로 학생을 칭찬하는 문장을 생성해주세요."
+                # 생성형 API를 호출하여 칭찬 문장 생성
+                praise_text = try_generate_content(gemini_api_key5, [comparison_prompt])
+                
+                # API 호출 실패 시, 두 번째 API 키로 재시도
+                if praise_text is None and gemini_api_key6 is not None:
+                    praise_text = try_generate_content(gemini_api_key6, [comparison_prompt])
+                
+                # 생성된 칭찬 문장을 세션 상태에 저장 및 출력
+                if praise_text is not None:
+                    st.session_state['praise_text'] = praise_text
+                else:
+                    st.error("칭찬 문장 생성에 실패했습니다. 나중에 다시 시도해주세요.")
             else:
-                st.error("칭찬 문장 생성에 실패했습니다. 나중에 다시 시도해주세요.")
-        else:
-            st.error("학생의 생각과 인공지능의 생각을 먼저 입력해주세요.")
+                st.error("학생의 생각과 인공지능의 생각을 먼저 입력해주세요.")
 
 with col2:  # 오른쪽 컬럼 시작
 

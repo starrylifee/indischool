@@ -68,12 +68,13 @@ if uploaded_file:
     img = Image.open(uploaded_file)
     st.image(img, caption="Uploaded Image", use_column_width=True)
     
-    # 첫 번째 API 키를 사용하여 시도
-    response_text = try_generate_content(gemini_api_key7, uploaded_file)
-    
-    # 첫 번째 API 키로 실패했을 경우 두 번째 키로 재시도
-    if not response_text or "API 호출 실패" in response_text:
-        response_text = try_generate_content(gemini_api_key8, uploaded_file)
+    with st.spinner("잠시만 기다리십시오"):
+        # 첫 번째 API 키를 사용하여 시도
+        response_text = try_generate_content(gemini_api_key7, uploaded_file)
+        
+        # 첫 번째 API 키로 실패했을 경우 두 번째 키로 재시도
+        if not response_text or "API 호출 실패" in response_text:
+            response_text = try_generate_content(gemini_api_key8, uploaded_file)
 
     if response_text and not "API 호출 실패" in response_text:
         st.write(to_markdown(response_text))

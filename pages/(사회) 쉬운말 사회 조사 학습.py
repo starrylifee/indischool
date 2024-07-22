@@ -112,19 +112,20 @@ query = st.text_input("조사할 주제")
 
 if st.button("검색하기"):
     if query:
-        # 네이버 백과사전 검색
-        item = search_naver_encyclopedia(query)
-        if item:
-            st.write(f"### 제목: {remove_html_tags(item['title'])}")
-            st.write(f"#### 링크: [Link]({item['link']})")
-            original_text = remove_html_tags(item['description'])
-            st.write(f"#### 원본 내용: {original_text}")
-            # OpenAI GPT로 요약
-            simplified_text = simplify_text(original_text)
-            st.write("#### 쉽게 번역된 내용")
-            st.write(simplified_text)
-        else:
-            st.warning("검색 결과가 없습니다.")
+        with st.spinner("잠시만 기다리십시오"):
+            # 네이버 백과사전 검색
+            item = search_naver_encyclopedia(query)
+            if item:
+                st.write(f"### 제목: {remove_html_tags(item['title'])}")
+                st.write(f"#### 링크: [Link]({item['link']})")
+                original_text = remove_html_tags(item['description'])
+                st.write(f"#### 원본 내용: {original_text}")
+                # OpenAI GPT로 요약
+                simplified_text = simplify_text(original_text)
+                st.write("#### 쉽게 번역된 내용")
+                st.write(simplified_text)
+            else:
+                st.warning("검색 결과가 없습니다.")
     else:
         st.warning("조사할 주제를 입력해주세요!")
 

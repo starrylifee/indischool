@@ -76,22 +76,22 @@ seed_movement_method = st.selectbox(
 )
 
 if st.button("아이디어 생성"):
-    
-    # few-shot 프롬프트 구성
-    prompt_parts = [
-        f"식물의 씨앗이 이동하는 방법은 크게 5가지가 있습니다.\n\n1. 동물의 몸에 붙어 움직이기\n2. 바람을 타고 날아가기\n3. 수분에 의한 이동\n4. 발사 메커니즘\n5. 동물의 소화 후 배설\n\n{seed_movement_method}를 이용해서 {item_name}의 기능을 개량할 수 있는 아이디어를 주세요.",
-    ]
+    with st.spinner("잠시만 기다리십시오"):
+        # few-shot 프롬프트 구성
+        prompt_parts = [
+            f"식물의 씨앗이 이동하는 방법은 크게 5가지가 있습니다.\n\n1. 동물의 몸에 붙어 움직이기\n2. 바람을 타고 날아가기\n3. 수분에 의한 이동\n4. 발사 메커니즘\n5. 동물의 소화 후 배설\n\n{seed_movement_method}를 이용해서 {item_name}의 기능을 개량할 수 있는 아이디어를 주세요.",
+        ]
 
-    # 첫 번째 API 키로 시도
-    response_text = try_generate_content(gemini_api_key3, prompt_parts)
-    
-    # 첫 번째 API 키 실패 시, 두 번째 API 키로 재시도
-    if response_text is None and gemini_api_key4 is not None:
-        print("첫 번째 API 호출에 실패하여 두 번째 API 키로 재시도합니다.")
-        response_text = try_generate_content(gemini_api_key4, prompt_parts)
-    
-    # 결과 출력
-    if response_text is not None:
-        st.markdown(to_markdown(response_text))
-    else:
-        st.error("API 호출에 실패했습니다. 나중에 다시 시도해주세요.")
+        # 첫 번째 API 키로 시도
+        response_text = try_generate_content(gemini_api_key3, prompt_parts)
+        
+        # 첫 번째 API 키 실패 시, 두 번째 API 키로 재시도
+        if response_text is None and gemini_api_key4 is not None:
+            print("첫 번째 API 호출에 실패하여 두 번째 API 키로 재시도합니다.")
+            response_text = try_generate_content(gemini_api_key4, prompt_parts)
+        
+        # 결과 출력
+        if response_text is not None:
+            st.markdown(to_markdown(response_text))
+        else:
+            st.error("API 호출에 실패했습니다. 나중에 다시 시도해주세요.")

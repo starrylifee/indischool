@@ -48,7 +48,7 @@ def try_generate_content(api_key, uploaded_file):
     }
 
     prompt_parts = [
-        "이 사진은 학생이 아크릴과 조명으로 만든 무드등입니다. 학생이 그린 그림을 자세히 묘사한 뒤 긍정적으로 평가해주고, AAA규격의 건전지2개로 불빛이 나오는 이 아크릴 무드등의 전기회로 원리를 설명해주세요.:\n",
+        "이 사진은 학생이 아크릴과 조명으로 만든 무드등입니다. 학생이 그린 그림을 자세히 묘사한 뒤 긍정적으로 평가해주고, AAA규격의 건전지 2개로 불빛이 나오는 이 아크릴 무드등의 전기회로 원리를 설명해주세요.:\n",
         image_parts,
     ]
 
@@ -68,12 +68,13 @@ if uploaded_file:
     img = Image.open(uploaded_file)
     st.image(img, caption="Uploaded Image", use_column_width=True)
     
-    # 첫 번째 API 키를 사용하여 시도
-    response_text = try_generate_content(gemini_api_key7, uploaded_file)
-    
-    # 첫 번째 API 키로 실패했을 경우 두 번째 키로 재시도
-    if not response_text or "API 호출 실패" in response_text:
-        response_text = try_generate_content(gemini_api_key8, uploaded_file)
+    with st.spinner("잠시만 기다리십시오"):
+        # 첫 번째 API 키를 사용하여 시도
+        response_text = try_generate_content(gemini_api_key7, uploaded_file)
+        
+        # 첫 번째 API 키로 실패했을 경우 두 번째 키로 재시도
+        if not response_text or "API 호출 실패" in response_text:
+            response_text = try_generate_content(gemini_api_key8, uploaded_file)
 
     if response_text and not "API 호출 실패" in response_text:
         st.write(to_markdown(response_text))
