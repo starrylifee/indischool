@@ -49,7 +49,7 @@ def try_generate_content(api_key, image):
         return None
 
 # 핸드폰 사진 업로드 기능 추가
-uploaded_file = st.file_uploader("핸드폰으로 화석표본을 가로로 찍어주세요.", type=["jpg", "jpeg", "png"])
+uploaded_file = st.file_uploader("핸드폰으로 화석표본을 가로로 예쁘게 찍어주세요.", type=["jpg", "jpeg", "png"])
 
 # 이미지가 업로드되었는지 확인
 if uploaded_file is not None:
