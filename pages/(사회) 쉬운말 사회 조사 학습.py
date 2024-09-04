@@ -128,7 +128,3 @@ if st.button("검색하기"):
                 st.warning("검색 결과가 없습니다.")
     else:
         st.warning("조사할 주제를 입력해주세요!")
-
-# 세션 초기화 버튼
-if st.button("다시 시작하기"):
-    st.rerun()
