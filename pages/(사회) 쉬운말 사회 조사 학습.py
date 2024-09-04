@@ -131,4 +131,4 @@ if st.button("검색하기"):
 
 # 세션 초기화 버튼
 if st.button("다시 시작하기"):
-    st.experimental_rerun()
+    st.rerun()
